@@ -91,6 +91,10 @@ def read_csv_file(file_path: str) -> Tuple[List[Dict[str, str]], Optional[str]]:
     """
     Read a CSV file and return its data as a list of dictionaries.
 
+    This helper handles input files that might include a UTF-8 BOM on the first
+    line. Opening with ``utf-8-sig`` will strip the BOM so that ``csv.DictReader``
+    can parse the quoted header correctly.
+
     Args:
         file_path: Path to the CSV file
 
@@ -98,7 +102,9 @@ def read_csv_file(file_path: str) -> Tuple[List[Dict[str, str]], Optional[str]]:
         A tuple of (csv_data, error_message) where error_message is None if successful
     """
     try:
-        with open(file_path, mode="r", encoding="utf-8") as csvfile:
+        # newline='' recommended by csv module documentation to prevent newline
+        # translation issues on all platforms.
+        with open(file_path, mode="r", encoding="utf-8-sig", newline="") as csvfile:
             csv_data = list(csv.DictReader(csvfile))
             return csv_data, None
     except IOError as e:

@@ -125,6 +125,27 @@ class TestReadCsvFile(unittest.TestCase):
         self.assertIsInstance(err, str)
         self.assertTrue(err)
 
+    def test_read_csv_file_bom_header(self):
+        # simulate a file with a UTF-8 BOM and quoted headers as seen in
+        # jul-aug-sep.csv; prior implementation would leave the BOM in the
+        # first field name, causing KeyError later.
+        bom = "\ufeff"
+        # place the BOM right before the first header character, no extra
+        # indentation characters should precede it; dedent is only needed for
+        # the following lines.
+        content = bom + textwrap.dedent("""\
+            "Date","Start Time","Consumption"
+            09/29/2025,12:00 AM,1.0
+        """)
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "bom.csv")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(content)
+            data, err = au.read_csv_file(path)
+            self.assertIsNone(err)
+            # Header should be cleaned; key should be 'Date' not include BOM or quotes
+            self.assertEqual(data[0]["Date"], "09/29/2025")
+
 
 class TestAnalyzeElectricUsageIntegration(unittest.TestCase):
     def test_analyze_electric_usage_happy_path_and_malformed_reporting(self):
@@ -165,6 +186,30 @@ class TestAnalyzeElectricUsageIntegration(unittest.TestCase):
 
             # Malformed rows reported (2 of them)
             self.assertIn("Error: skipped 2 malformed rows", stderr)
+
+    def test_analyze_electric_usage_bom_file(self):
+        # File starts with a BOM and quoted headers similar to real data.
+        content = "\ufeff\"Date\",\"Start Time\",\"Consumption\"\n"
+        content += "09/29/2025,12:00 AM,2.0\n"
+
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, "bom.csv")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+            out = io.StringIO()
+            err = io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                au.analyze_electric_usage(path)
+
+            stdout = out.getvalue()
+            stderr = err.getvalue()
+
+            # Should parse and show a valid table with a Monday value of 2.0000
+            self.assertIn("Average Energy Consumption (kWh) by Time and Day of Week", stdout)
+            self.assertIn("12:00 AM - 2:00 AM", stdout)
+            self.assertIn(f"{2.0:^12.4f}", stdout)
+            self.assertEqual(stderr, "")
 
     def test_analyze_electric_usage_file_error(self):
         out = io.StringIO()
