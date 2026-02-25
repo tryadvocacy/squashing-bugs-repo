@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 import sys
+import os
 from typing import Dict, List, Tuple, Optional, TextIO
 
 
@@ -166,8 +167,6 @@ def analyze_electric_usage(file_path: str) -> None:
 
     Args:
         file_path: The path to the CSV file.
-        output_stream: Stream to write output to (default: stdout).
-        error_stream: Stream to write errors to (default: stderr).
     """
     csv_data, error = read_csv_file(file_path)
     if error:
@@ -187,7 +186,8 @@ def analyze_electric_usage(file_path: str) -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python analyze_usage.py <path_to_csv_file>")
+        script = os.path.basename(sys.argv[0])
+        print(f"Usage: python {script} <path_to_csv_file>")
         sys.exit(1)
 
     csv_file = sys.argv[1]
