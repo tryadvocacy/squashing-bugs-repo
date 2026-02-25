@@ -1,0 +1,187 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.200
+Python 3.14 is now officially released, and I'd like to share some of my favorite new features.
+
+00:00:05.760 --> 00:00:10.320
+I'm not going to talk about the experimental free-threading mode, the just-in-time compiler,
+
+00:00:10.320 --> 00:00:15.600
+or other performance improvements. I'm going to focus on features that you can use right after
+
+00:00:15.600 --> 00:00:22.000
+you upgrade. One of the most immediately visible features in Python 3.14 is all the color. The
+
+00:00:22.000 --> 00:00:27.280
+Python REPL now includes syntax highlighting. When you type code into the Python REPL,
+
+00:00:27.280 --> 00:00:33.599
+it will be colorized as you type it. The Python debugger also gains syntax highlighting in 3.14,
+
+00:00:33.599 --> 00:00:37.599
+so when you're debugging code, whether with a breakpoint call or some other way of entering
+
+00:00:37.599 --> 00:00:44.160
+PDB, your source code will now be colorized. Also, if you've ever wished that Python's
+
+00:00:44.160 --> 00:00:50.160
+unit test module included nicely colored output like pytest, it does now. Now with unit test,
+
+00:00:50.160 --> 00:00:56.799
+failing tests are red and passing tests are green. And that's not all the color. The argparse module
+
+00:00:56.799 --> 00:01:03.520
+now also supports colorized help text. Also, the json module's command line interface now displays
+
+00:01:03.520 --> 00:01:08.800
+JSON output in color by default. Speaking of the json module's command line interface, you can now
+
+00:01:08.800 --> 00:01:15.519
+run it with python-m json instead of python-m json.tool. I actually made this tiny change,
+
+00:01:15.519 --> 00:01:20.400
+and it's the first code contribution I've made to Python. It is a very small one, but kind of a neat
+
+00:01:20.400 --> 00:01:27.040
+one. Python 3.14 includes even more improvements to error messages, particularly syntax errors.
+
+00:01:27.040 --> 00:01:31.919
+In previous versions of Python, you'd often get a generic syntax error if you misspelled a Python
+
+00:01:31.919 --> 00:01:39.199
+keyword like import. But in Python 3.14, the error message now suggests the correct keyword instead.
+
+00:01:39.919 --> 00:01:44.400
+Python's error messages have improved a lot in the past few versions, and this is exactly the
+
+00:01:44.400 --> 00:01:48.639
+kind of change that makes Python even more beginner-friendly. Another REPL improvement
+
+00:01:48.639 --> 00:01:54.400
+that I stumbled upon recently while teaching is tab completion of Python imports. When you're in
+
+00:01:54.400 --> 00:01:59.919
+the REPL and you type the import statement followed by the start of a module name, and then you hit
+
+00:01:59.919 --> 00:02:05.199
+tab, it auto-completes the module name. This is especially handy for long module names like
+
+00:02:05.199 --> 00:02:11.520
+collections or datetime. Python 3.14 also includes a bunch of little improvements to various standard
+
+00:02:11.520 --> 00:02:17.919
+library modules. For example, the argparse module now includes a suggest on error argument that will
+
+00:02:17.919 --> 00:02:23.360
+suggest corrections when you make a typo in the choices options for a command line argument. Here
+
+00:02:23.360 --> 00:02:28.800
+we're misspelling scissors, and Python's showing us the option that it thinks we meant to type
+
+00:02:28.800 --> 00:02:35.600
+spelled correctly. One of my favorite features in Python 3.14 is that pathlib.Path objects now
+
+00:02:35.600 --> 00:02:42.559
+have copy and move methods. Before 3.14, if we wanted to copy or move a file, we had to use
+
+00:02:42.559 --> 00:02:49.199
+Python's shutil module. But in 3.14, you can just use the move method directly on the Path object.
+
+00:02:49.199 --> 00:02:54.399
+There's also a move_into method for moving a file into a directory, as well as a copy method and a
+
+00:02:54.399 --> 00:03:00.559
+copy_into method. The path class also gained a new info attribute that caches information about
+
+00:03:00.559 --> 00:03:07.039
+whether a path represents an existing file or directory. In 3.14, you can also now parse a date
+
+00:03:07.039 --> 00:03:13.919
+string or a time string directly into a datetime.date object or a datetime.time object. In previous
+
+00:03:13.919 --> 00:03:18.960
+versions of Python, you either needed to use datetime.datetime.strptime and then extract the
+
+00:03:18.960 --> 00:03:26.800
+date or parse the string manually. But in 3.14, you can just use date.strptime directly. The date
+
+00:03:26.800 --> 00:03:32.479
+and time classes now have their own strptime method that works the same way as the datetime
+
+00:03:32.479 --> 00:03:39.839
+class's strptime method. Python's UUID module now includes UUID 6, 7, and 8 functions. If you're
+
+00:03:39.839 --> 00:03:45.520
+starting a new project and you need to generate UUIDs, I'd recommend taking a look at uuid7.
+
+00:03:45.520 --> 00:03:52.479
+It has all the pseudo-randomness benefits of uuid4, but the generated UUIDs are also ordered by
+
+00:03:52.479 --> 00:03:58.240
+their creation time. The sortability of these UUIDs can be really useful for things like database
+
+00:03:58.240 --> 00:04:03.759
+primary keys. Have you ever written code that catches multiple exception types? In previous
+
+00:04:03.759 --> 00:04:09.679
+Python versions, you needed to wrap those exception types in parentheses. In 3.14, you can omit the
+
+00:04:09.679 --> 00:04:15.679
+parentheses and the code still works. This earlier version was a holdover back from the Python 2 days.
+
+00:04:16.720 --> 00:04:21.600
+3.14 also includes some interesting improvements for concurrent and parallel programming.
+
+00:04:21.600 --> 00:04:26.559
+Concurrent.futures now includes an interpreter pool executor, which spawns a new Python
+
+00:04:26.559 --> 00:04:31.440
+interpreter in a separate thread, but in the same process, and each interpreter has its own global
+
+00:04:31.440 --> 00:04:37.040
+interpreter lock, meaning they can each use separate CPUs if needed. So you kind of get the best of
+
+00:04:37.040 --> 00:04:41.519
+both worlds between multi-threading and multi-processing. Also, if you've ever needed to
+
+00:04:41.519 --> 00:04:48.000
+inspect running asyncio tasks, well, you can now do so from the command line. Also, 3.14 now has an
+
+00:04:48.000 --> 00:04:53.839
+external debugger interface that allows you to safely attach debuggers to running Python processes,
+
+00:04:53.839 --> 00:04:57.279
+so you can start a breakpoint from a process that's already running.
+
+00:04:57.839 --> 00:05:04.239
+The last thing I'd like to talk about in 3.14 is a new syntax, t-strings. The T in t-string stands
+
+00:05:04.239 --> 00:05:09.440
+for template, and unlike f-strings, they don't actually make strings. They make template objects.
+
+00:05:10.000 --> 00:05:15.279
+These template objects allow a utility to pre-process the interpolations within the
+
+00:05:15.279 --> 00:05:20.959
+template in whatever way they'd like before actually making a string. Keep in mind that
+
+00:05:20.959 --> 00:05:26.239
+f-strings are still the go-to string formatting tool. T-strings are really useful for library
+
+00:05:26.239 --> 00:05:32.320
+authors in particular, so you might find yourself soon using a library in Python where a t-string
+
+00:05:32.320 --> 00:05:36.720
+is required and not an f-string, because some pre-processing needs to be done in some of your
+
+00:05:36.720 --> 00:05:42.160
+data. I'm planning to release another video all about t-strings soon. If you're excited about
+
+00:05:42.160 --> 00:05:47.279
+syntax highlighting, the new pathlib methods, or anything else that I mentioned, go install Python
+
+00:05:47.279 --> 00:05:51.279
+3.14 and try it out. And if you want to see everything that's new,
+
+00:05:51.279 --> 00:05:55.200
+go to the What's New in Python 3.14 page in the documentation.
